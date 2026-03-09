@@ -1,0 +1,152 @@
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      align-items: center;
+    justify-content: center;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .star.active, .star:hover {
+      color: gold;
+    }
+    div {
+        margin: 20px auto;
+        max-width: 500px;
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px grey;
+    }
+    .listtttt {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <h1>Add a Movie</h1>
+    <div id="addForm">
+            <label>
+                Title:
+                <input type="text" id="title">
+            </label>
+            <label>
+                Year:
+                <input type="text" id="year">
+            </label>
+            <label>
+                Genre:
+                <select id="genre">
+                    <option value="Action">Action</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                </select>
+            </label>
+            <label>
+                Rating:
+                <div class="stars">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+            </label>
+            <button type="button" onclick="addMovie()">Add Movie</button>
+    <div id="listtttt" class="listtttt">
+        <h2>Movie List</h2>
+        <ul id="newMovies">
+        </ul>
+    </div>
+    </div>
+
+</body>
+
+
+
+
+
+
+<script>
+    let daRatingfr = 0;
+
+    document.querySelectorAll(".star").forEach(star => {
+      star.addEventListener("click", function() {
+        daRatingfr = this.getAttribute("data-value");
+        annoyingStars(daRatingfr);
+      });
+    });
+
+    function annoyingStars(rating) {
+      document.querySelectorAll(".star").forEach(star => {
+        star.classList.remove("active");
+        if (star.getAttribute("data-value") <= rating) {
+          star.classList.add("active");
+        }
+      });
+    }
+
+    function addMovie() {
+        let title = document.getElementById("title").value;
+        let year = document.getElementById("year").value;
+        let genre = document.getElementById("genre").value;
+        let rating = daRatingfr;
+
+        let movie = {
+            title: title,
+            year: year,
+            genre: genre,
+            rating: rating
+        };
+
+        let movies = JSON.parse(localStorage.getItem("savedMovies")) || [];
+        movies.push(movie);
+        localStorage.setItem("savedMovies", JSON.stringify(movies));
+
+        showMovies();
+    }
+
+    function showMovies() {
+        let movies = JSON.parse(localStorage.getItem("savedMovies")) || [];
+        let movieList = document.getElementById("newMovies");
+        movieList.innerHTML = "";
+
+        movies.forEach(movie => {
+            let yoimAlmostdone = document.createElement("div");
+            yoimAlmostdone.innerHTML = `${movie.title} (${movie.year}) - ${movie.genre} - Rating: ${"⭐".repeat(movie.rating)}`;
+            movieList.appendChild(yoimAlmostdone);
+        });
+    }
+</script>
